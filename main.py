@@ -7,6 +7,8 @@ import time
 
 
 HOLD_TIMER_SEC = 360
+BOOT_IMAGE = 'startup.webp'
+
 
 SCRIPT_PATH = os.path.dirname(__file__)
 IMAGE_CACHE_DIRECTORY = os.path.join(SCRIPT_PATH, 'images')
@@ -14,6 +16,17 @@ IMAGE_FILE_CACHE = []
 
 CURRENT_IMAGE = ''
 
+def display_boot_image(display) -> None:
+    global SCRIPT_PATH
+    global BOOT_IMAGE
+    boot_image_path = os.path.join(SCRIPT_PATH, f'boot/{BOOT_IMAGE}') 
+    
+    boot_image = PIL.Image.open(boot_image_path)
+    image_to_display = scale_image(boot_image, display.resolution)
+
+    display.set_border(inky.BLACK)
+    display.set_image(image_to_display)
+    display.show()
 
 
 def get_image_cache_content() -> list:
@@ -80,6 +93,8 @@ def main() -> None:
         print('Could not find compatible display! The program will exit.')
         exit()
     
+    display_boot_image(display)
+
     global IMAGE_FILE_CACHE
     IMAGE_FILE_CACHE = get_image_cache_content()
 
